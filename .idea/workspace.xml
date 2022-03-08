@@ -14,6 +14,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -93,7 +94,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.KeyShardingTests.produceRandomString">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="RSAShamirShardCLI" />
@@ -104,8 +105,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="KeyShardingTests.produceRandomString" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="RSAShamirShardCLI" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.KeyShardingTests" />
+      <option name="METHOD_NAME" value="produceRandomString" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Main" />
+      <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
