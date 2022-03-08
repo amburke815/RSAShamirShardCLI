@@ -74,9 +74,10 @@ public class ShardingCLIImpl implements IShardingCLI {
   public String decrypt(String cipherText, KeyPair decryptWith) {
     try {
       Cipher decCipher = Cipher.getInstance(keyType);
-      decCipher.init(Cipher.DECRYPT_MODE, decryptWith.getPublic());
+      decCipher.init(Cipher.DECRYPT_MODE, decryptWith.getPrivate());
       byte[] cipherTextBytes = cipherText.getBytes(StandardCharsets.UTF_8);
       byte[] plainTextBytes = decCipher.doFinal(cipherTextBytes);
+
       return new String(plainTextBytes, StandardCharsets.UTF_8);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
         BadPaddingException | NoSuchPaddingException e) {
