@@ -1,4 +1,4 @@
-package sharding;
+package sharding.cli;
 
 import java.security.KeyPair;
 import java.util.List;
@@ -10,9 +10,11 @@ public interface IShardingCLI {
 
   KeyPair RSAKeyGen();
 
+  KeyPair RSAKeyGen(int keySize);
+
   List<IKeyShard> shamirShardKey(KeyPair toShard, int numShards);
 
-  void writeShards();
+  void writeShards(List<IKeyShard> shards);
 
   String encrypt(String plainText, KeyPair encryptWith);
 
