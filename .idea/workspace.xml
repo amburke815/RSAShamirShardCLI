@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a8ce08b0-0636-41d1-ac46-3575f1d639a7" name="Default Changelist" comment="" />
+    <list default="true" id="a8ce08b0-0636-41d1-ac46-3575f1d639a7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/IShardingCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sharding/cli/IShardingCLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/ShardingCLIImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sharding/cli/ShardingCLIImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/shards/IKeyShard.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -93,6 +99,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunManager" selected="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
@@ -137,14 +144,32 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="KeyShardingTests.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="RSAShamirShardCLI" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.KeyShardingTests" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.Main" />
       <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
       <item itemvalue="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption" />
+      <item itemvalue="JUnit.KeyShardingTests.test" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption" />
+        <item itemvalue="JUnit.KeyShardingTests.test" />
         <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
         <item itemvalue="Application.Main" />
       </list>
@@ -160,5 +185,16 @@
       <updated>1646691918922</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

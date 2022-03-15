@@ -1,6 +1,7 @@
 package tests;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
+import java.util.Map.Entry;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,11 +26,13 @@ public class KeyShardingTests {
     String plainText = randomStringPlainText;
     //System.out.println(plainText.length());
     plainText = "the quick brown fox jumps over the lazy dog";
-    byte[] encryptedMessage = shardingCLI.encrypt(plainText, kp);
+    byte[] encryptedMessage = shardingCLI.encrypt(plainText, kp.getPublic());
     System.out.println("encrypted message from byte arr: " + new String(encryptedMessage, StandardCharsets.US_ASCII));
-    String decryptedMessage = shardingCLI.decrypt(encryptedMessage, kp);
+    String decryptedMessage = shardingCLI.decrypt(encryptedMessage, kp.getPrivate());
     System.out.println(decryptedMessage);
 
     Assert.assertEquals(plainText, decryptedMessage);
   }
+
+
 }

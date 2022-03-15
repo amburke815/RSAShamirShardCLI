@@ -2,21 +2,31 @@ package sharding.cli;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.KeySpec;
+import java.util.HashMap;
+import java.util.IllegalFormatWidthException;
 import java.util.List;
+import java.util.Map;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import sharding.Utils;
-import sharding.shards.IKeyShard;
+import com.codahale.shamir.Scheme;
+import java.security.SecureRandom;
 
 public class ShardingCLIImpl implements IShardingCLI {
 
   private static int defaultKeySize = 2048;
   private static String keyType = "RSA";
+  private Scheme scheme;
+  private Map<Integer, byte[]> shardsMap;
 
   @Override
   public String helpMenu() {
@@ -43,20 +53,24 @@ public class ShardingCLIImpl implements IShardingCLI {
   }
 
   @Override
-  public List<IKeyShard> shamirShardKey(KeyPair toShard, int numShards) {
-    return null;
+  public Map<Integer, byte[]> shamirShardKey(KeyPair toShard, int numTotalShards, int minShardsToCreate) {
+    scheme = new Scheme(new SecureRandom(), numTotalShards, minShardsToCreate);
+    final byte[] privateKeyBytes = toShard.getPrivate().getEncoded();
+    shardsMap = scheme.split(privateKeyBytes);
+    return shardsMap;
+
   }
 
   @Override
-  public void writeShards(List<IKeyShard> shards) {
+  public void writeShards(List<byte[]> shards) {
 
   }
 
   @Override
-  public byte[] encrypt(String plainText, KeyPair encryptWith) {
+  public byte[] encrypt(String plainText, PublicKey encryptWith) {
     try {
       Cipher encCipher = Cipher.getInstance(keyType);
-      encCipher.init(Cipher.ENCRYPT_MODE, encryptWith.getPublic());
+      encCipher.init(Cipher.ENCRYPT_MODE, encryptWith);
       byte[] plainTextBytes = plainText.getBytes(StandardCharsets.UTF_8);
       System.out.println("\n\n++plaintext size: " + plainTextBytes.length);
       System.out.println("\n++BLOCK SIZE: " + encCipher.getBlockSize());
@@ -68,16 +82,11 @@ public class ShardingCLIImpl implements IShardingCLI {
   }
 
   @Override
-  public byte[] encrypt(String plainText, List<IKeyShard> shards) {
-    return encrypt(plainText, assembleShards(shards));
-  }
-
-  @Override
-  public String decrypt(byte[] cipherTextBytes, KeyPair decryptWith) {
+  public String decrypt(byte[] cipherTextBytes, PrivateKey decryptWith) {
     try {
       Cipher decCipher = Cipher.getInstance(keyType);
-      decCipher.init(Cipher.DECRYPT_MODE, decryptWith.getPrivate());
-      byte[] plainTextBytes = decCipher.doFinal(cipherTextBytes);
+      decCipher.init(Cipher.DECRYPT_MODE, decryptWith);
+      final byte[] plainTextBytes = decCipher.doFinal(cipherTextBytes);
 
       return new String(plainTextBytes, StandardCharsets.US_ASCII);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
@@ -86,14 +95,27 @@ public class ShardingCLIImpl implements IShardingCLI {
     }
   }
 
-  @Override
-  public String decrypt(byte[] cipherTextBytes, List<IKeyShard> shards) {
-    return decrypt(cipherTextBytes, assembleShards(shards));
-  }
+//  @Override
+//  public String decrypt(byte[] cipherTextBytes, List<byte[]> shards) {
+//    return decrypt(cipherTextBytes, assembleShards(shards));
+//  }
 
   @Override
-  public KeyPair assembleShards(List<IKeyShard> shards) {
-    return null;
+  public byte[] assembleShards(int... shardIndices) {
+    if (shardsMap == null) {
+      throw new IllegalStateException("Cannot assemble key shards. Never sharded using Shamir");
+    }
+
+    Map<Integer, byte[]> presentedShards = new HashMap<>();
+    for(int i : shardIndices) {
+      if (shardsMap.containsKey(i))
+        presentedShards.putIfAbsent(i, shardsMap.get(i));
+    }
+
+
+    return Utils.notNull(scheme).join(presentedShards);
+
+
   }
 
   private final int checkRSAKeySize(int size) throws InsecureRSAKeySizeException {

@@ -1,8 +1,10 @@
 package sharding.cli;
 
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.List;
-import sharding.shards.IKeyShard;
+import java.util.Map;
 
 public interface IShardingCLI {
 
@@ -12,19 +14,17 @@ public interface IShardingCLI {
 
   KeyPair RSAKeyGen(int keySize);
 
-  List<IKeyShard> shamirShardKey(KeyPair toShard, int numShards);
+  Map<Integer, byte[]> shamirShardKey(KeyPair toShard, int numTotalShards, int minShardsToCreate);
 
-  void writeShards(List<IKeyShard> shards);
+  void writeShards(List<byte[]> shards);
 
-  byte[] encrypt(String plainText, KeyPair encryptWith);
+  byte[] encrypt(String plainText, PublicKey encryptWith);
 
-  byte[] encrypt(String plainText, List<IKeyShard> shards);
+  String decrypt(byte[] cipherTextBytes, PrivateKey decryptWith);
 
-  String decrypt(byte[] cipherTextBytes, KeyPair decryptWith);
+  // String decrypt(byte[] cipherTextBytes, List<byte[]> shards);
 
-  String decrypt(byte[] cipherTextBytes, List<IKeyShard> shards);
-
-  KeyPair assembleShards(List<IKeyShard> shards);
+  byte[] assembleShards(int... shardIndices);
 
 
 
