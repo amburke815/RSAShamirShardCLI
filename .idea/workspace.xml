@@ -101,7 +101,7 @@
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
-  <component name="RunManager" selected="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption">
+  <component name="RunManager" selected="JUnit.KeyShardingTests.programWorksCorrectly">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="RSAShamirShardCLI" />
@@ -144,6 +144,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="KeyShardingTests.programWorksCorrectly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="RSAShamirShardCLI" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.KeyShardingTests" />
+      <option name="METHOD_NAME" value="programWorksCorrectly" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="KeyShardingTests.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="RSAShamirShardCLI" />
       <extension name="coverage">
@@ -165,9 +181,11 @@
       <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
       <item itemvalue="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption" />
       <item itemvalue="JUnit.KeyShardingTests.test" />
+      <item itemvalue="JUnit.KeyShardingTests.programWorksCorrectly" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.KeyShardingTests.programWorksCorrectly" />
         <item itemvalue="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption" />
         <item itemvalue="JUnit.KeyShardingTests.test" />
         <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
