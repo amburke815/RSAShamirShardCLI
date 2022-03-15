@@ -1,4 +1,4 @@
-package sharding.cli;
+package sharding.cli.model;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -18,7 +18,7 @@ import sharding.Utils;
 import com.codahale.shamir.Scheme;
 import java.security.SecureRandom;
 
-public class ShardingCLIImpl implements IShardingCLI {
+public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   private static int defaultKeySize = 2048;
   private static String keyType = "RSA";

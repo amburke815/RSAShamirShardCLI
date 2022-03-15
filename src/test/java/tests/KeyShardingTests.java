@@ -8,21 +8,21 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import sharding.cli.IShardingCLI;
-import sharding.cli.ShardingCLIImpl;
+import sharding.cli.model.IShardingCLIModel;
+import sharding.cli.model.ShardingCLIModelImpl;
 
 public class KeyShardingTests {
 //   RandomStringUtils s;
   RandomStringUtils rsu = new RandomStringUtils();
   int randomStringLength = 256;
   public String randomStringPlainText = RandomStringUtils.random(randomStringLength, true, true);
-  private IShardingCLI shardingCLI = new ShardingCLIImpl();
+  private IShardingCLIModel shardingCLI = new ShardingCLIModelImpl();
   private KeyPair kp = shardingCLI.RSAKeyGen();
 
 
   @Test
   public void programWorksCorrectly() {
-    IShardingCLI cliInstance = new ShardingCLIImpl();
+    IShardingCLIModel cliInstance = new ShardingCLIModelImpl();
     // 1. creates the RSA key pair with a private key broken into 5 shards
     KeyPair generatedRSAKeyPair = cliInstance.RSAKeyGen();
     cliInstance.shamirShardKey(generatedRSAKeyPair, 5, 2);
