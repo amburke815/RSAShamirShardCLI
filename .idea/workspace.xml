@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a8ce08b0-0636-41d1-ac46-3575f1d639a7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/IShardingCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sharding/cli/IShardingCLI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/ShardingCLIImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sharding/cli/ShardingCLIImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/shards/IKeyShard.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/com/company/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/IShardingCLI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/IShardingCLI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/InsecureRSAKeySizeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/InsecureRSAKeySizeException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sharding/cli/ShardingCLIImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/ShardingCLIImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
