@@ -16,13 +16,13 @@ public interface IShardingCLI {
 
   void writeShards(List<IKeyShard> shards);
 
-  String encrypt(String plainText, KeyPair encryptWith);
+  byte[] encrypt(String plainText, KeyPair encryptWith);
 
-  String encrypt(String plainText, List<IKeyShard> shards);
+  byte[] encrypt(String plainText, List<IKeyShard> shards);
 
-  String decrypt(String cipherText, KeyPair decryptWith);
+  String decrypt(byte[] cipherTextBytes, KeyPair decryptWith);
 
-  String decrypt(String cipherText, List<IKeyShard> shards);
+  String decrypt(byte[] cipherTextBytes, List<IKeyShard> shards);
 
   KeyPair assembleShards(List<IKeyShard> shards);
 

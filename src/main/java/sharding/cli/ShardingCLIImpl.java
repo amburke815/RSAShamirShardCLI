@@ -5,7 +5,6 @@ import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.List;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -33,7 +32,9 @@ public class ShardingCLIImpl implements IShardingCLI {
   public KeyPair RSAKeyGen(int keySize) {
     try {
       KeyPairGenerator kpg = KeyPairGenerator.getInstance(keyType);
-      kpg.initialize(Utils.intBetween(1, keySize, Integer.MAX_VALUE));
+      kpg.initialize(Utils.intBetween(1, checkRSAKeySize(keySize),
+          Integer.MAX_VALUE));
+
       return kpg.generateKeyPair();
 
     } catch (NoSuchAlgorithmException e) {
@@ -52,46 +53,54 @@ public class ShardingCLIImpl implements IShardingCLI {
   }
 
   @Override
-  public String encrypt(String plainText, KeyPair encryptWith) {
+  public byte[] encrypt(String plainText, KeyPair encryptWith) {
     try {
       Cipher encCipher = Cipher.getInstance(keyType);
       encCipher.init(Cipher.ENCRYPT_MODE, encryptWith.getPublic());
       byte[] plainTextBytes = plainText.getBytes(StandardCharsets.UTF_8);
-      byte[] cipherTextBytes = encCipher.doFinal(plainTextBytes);
-      return Base64.getEncoder().encodeToString(cipherTextBytes);
+      System.out.println("\n\n++plaintext size: " + plainTextBytes.length);
+      System.out.println("\n++BLOCK SIZE: " + encCipher.getBlockSize());
+      return encCipher.doFinal(plainTextBytes);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
         BadPaddingException | NoSuchPaddingException e) {
-      throw new IllegalStateException("caught an " + e.getClass() + " when encrypting ciphertext");
+      throw new IllegalStateException("caught an " + e.getClass() + " when encrypting ciphertext" + e.getMessage());
     }
   }
 
   @Override
-  public String encrypt(String plainText, List<IKeyShard> shards) {
+  public byte[] encrypt(String plainText, List<IKeyShard> shards) {
     return encrypt(plainText, assembleShards(shards));
   }
 
   @Override
-  public String decrypt(String cipherText, KeyPair decryptWith) {
+  public String decrypt(byte[] cipherTextBytes, KeyPair decryptWith) {
     try {
       Cipher decCipher = Cipher.getInstance(keyType);
       decCipher.init(Cipher.DECRYPT_MODE, decryptWith.getPrivate());
-      byte[] cipherTextBytes = cipherText.getBytes(StandardCharsets.UTF_8);
       byte[] plainTextBytes = decCipher.doFinal(cipherTextBytes);
 
-      return new String(plainTextBytes, StandardCharsets.UTF_8);
+      return new String(plainTextBytes, StandardCharsets.US_ASCII);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
         BadPaddingException | NoSuchPaddingException e) {
-      throw new IllegalStateException("caught an " + e.getClass() + " when encrypting ciphertext");
+      throw new IllegalStateException("caught an " + e.getClass() + " when encrypting ciphertext \n\n" + e.getMessage());
     }
   }
 
   @Override
-  public String decrypt(String cipherText, List<IKeyShard> shards) {
-    return decrypt(cipherText, assembleShards(shards));
+  public String decrypt(byte[] cipherTextBytes, List<IKeyShard> shards) {
+    return decrypt(cipherTextBytes, assembleShards(shards));
   }
 
   @Override
   public KeyPair assembleShards(List<IKeyShard> shards) {
     return null;
+  }
+
+  private final int checkRSAKeySize(int size) throws InsecureRSAKeySizeException {
+    if (size % 2048 != 0) {
+      throw new InsecureRSAKeySizeException();
+    }
+
+    return size;
   }
 }
