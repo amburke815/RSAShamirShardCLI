@@ -18,13 +18,21 @@ public class ShardKeyCommand extends ACLIClientCommand {
         + "total Shamir shards");
     int n = 0;
     if (sc.hasNext()) {
-      n = Integer.parseInt(sc.next());
+      try {
+        n = Integer.parseInt(sc.next());
+      } catch (NumberFormatException e) {
+        vcClient.renderOutput("invalid shard number n. Please enter a positive integer");
+      }
     }
-    vcClient.renderOutput("Now enter a positive integer n <= k representing the minimum"
+    vcClient.renderOutput("Now enter a positive integer k <= n representing the minimum"
         + " number of Shamir shards required to recreate the private key");
     int k = 0;
     if (sc.hasNext()) {
-      k = Integer.parseInt(sc.next());
+      try {
+        k = Integer.parseInt(sc.next());
+      } catch (NumberFormatException e) {
+        vcClient.renderOutput("invalid shard number k. Please enter a positive integer");
+      }
     }
     try {
       vcClient.renderOutput("Sharding the private key into " + n + " total shards of which "

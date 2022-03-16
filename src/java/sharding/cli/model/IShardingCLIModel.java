@@ -172,10 +172,13 @@ public interface IShardingCLIModel {
    * shards are required to reassemble the key, we could call
    * <code>assembleShards(i₁, i₂, ..., iₖ)</code> to reassemble the key, where all
    * <code>iⱼ</code> are distinct for <code>0 <= j <= n</code>.
-   * @param shardIndices
-   * @return
+   * @param shardIndices the indices (starting from 1) of the shamir shards to use to reassemble the
+   *                     private RSA key
+   * @return the reassembled private key
+   * @throws IllegalStateException if the method failed to reassemble the private key
    */
-  byte[] assembleShards(int... shardIndices);
+  PrivateKey assembleShards(int... shardIndices)
+    throws IllegalStateException;
 
 
   // public setter for RSA key field

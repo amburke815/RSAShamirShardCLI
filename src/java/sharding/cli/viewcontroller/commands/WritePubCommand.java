@@ -3,8 +3,13 @@ package sharding.cli.viewcontroller.commands;
 import java.io.File;
 import java.nio.file.Path;
 import sharding.cli.model.NoSuchKeyException;
+import sharding.cli.viewcontroller.ICLIViewControllerClient;
 
 public class WritePubCommand extends ACLIClientCommand {
+
+  public WritePubCommand(ICLIViewControllerClient vcClient) {
+    super(vcClient);
+  }
 
   @Override
   public void execute() {

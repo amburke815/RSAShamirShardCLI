@@ -6,11 +6,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,6 +34,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   private Scheme scheme;
   private KeyPair generatedKeyPair;
   private Map<Integer, byte[]> shardsMap;
+  private PrivateKey reassembledPrivateKey;
 
   /**
    * default ctor
@@ -70,6 +75,11 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   // getter for shards map
   public Map<Integer, byte[]> getShardsMap() {
     return shardsMap;
+  }
+
+  // getter for reassembled private key
+  public PrivateKey getReassembledPrivateKey() {
+    return reassembledPrivateKey;
   }
 
   @Override
@@ -153,7 +163,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
    * @param shardBytes the shard's value, as a byte array
    */
   private static void writeShard(int shardIdx, byte[] shardBytes) {
-    File toWrite = new File(path + "Shard" + (shardIdx + 1) + ".TXT");
+    File toWrite = new File(path + "Shard" + shardIdx + ".TXT");
     try {
       OutputStream os = new FileOutputStream(toWrite);
       os.write(shardBytes);
@@ -170,8 +180,8 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
       Cipher encCipher = Cipher.getInstance(keyType);
       encCipher.init(Cipher.ENCRYPT_MODE, encryptWith);
       byte[] plainTextBytes = plainText.getBytes(StandardCharsets.UTF_8);
-      System.out.println("\n\n++plaintext size: " + plainTextBytes.length);
-      System.out.println("\n++BLOCK SIZE: " + encCipher.getBlockSize());
+      //System.out.println("\n\n++plaintext size: " + plainTextBytes.length);
+      //System.out.println("\n++BLOCK SIZE: " + encCipher.getBlockSize());
       return encCipher.doFinal(plainTextBytes);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
         BadPaddingException | NoSuchPaddingException e) {
@@ -202,7 +212,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   @Override
   public String decrypt(byte[] cipherTextBytes) throws NoSuchKeyException {
-    return decrypt(cipherTextBytes, checkKeyPairGenerated(generatedKeyPair).getPrivate());
+    return decrypt(cipherTextBytes, checkPrivateKeyReassembled(reassembledPrivateKey));
   }
 
 
@@ -212,7 +222,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 //  }
 
   @Override
-  public byte[] assembleShards(int... shardIndices) {
+  public PrivateKey assembleShards(int... shardIndices) {
     if (shardsMap == null) {
       throw new IllegalStateException("Cannot assemble key shards. Never sharded using Shamir");
     }
@@ -224,8 +234,15 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
       }
     }
 
-    return Utils.notNull(scheme).join(presentedShards);
+    byte[] reassembledPrivateKeyBytes = Utils.notNull(scheme).join(presentedShards);
 
+    try {
+      KeyFactory kf = KeyFactory.getInstance("RSA");
+      EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(reassembledPrivateKeyBytes);
+      return kf.generatePrivate(privKeySpec);
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      throw new IllegalStateException("Caught an " + e.getClass() + ". Could not reassemble shards to private key");
+    }
 
   }
 
@@ -276,16 +293,16 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   /**
    * Checks that the given shards have been generated, i.e. that it is not <code>null</code>.
-   * Returns the shards map if this is true, throws a <code>NoSuchKeyException</code> otherwise.
+   * Returns the shards map if this is true, throws a <code>KeyNotSharded</code> otherwise.
    *
    * @param toCheck the shards map to check for nullity.
    * @return the given shards map if it is not null
-   * @throws NoSuchKeyException if the shards map is null
+   * @throws KeyNotShardedException if the shards map is null
    */
   private static Map<Integer, byte[]> checkShardsMapGenerated(Map<Integer, byte[]> toCheck)
-      throws NoSuchKeyException {
+      throws KeyNotShardedException {
     if (toCheck == null) {
-      throw new NoSuchKeyException();
+      throw new KeyNotShardedException();
     }
 
     return toCheck;
@@ -296,4 +313,13 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
     if (k > n || n < 1)
       throw new IllegalShamirShardingParametersException();
   }
+
+
+  private static PrivateKey checkPrivateKeyReassembled(PrivateKey pk) {
+    if (pk == null) {
+      throw new NoReassembledKeyException();
+    }
+    return pk;
+  }
+
 }

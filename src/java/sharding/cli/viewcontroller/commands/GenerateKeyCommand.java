@@ -22,7 +22,11 @@ public class GenerateKeyCommand extends ACLIClientCommand {
         + "size of 2048\n\n");
     int keySize = 2048;
     if (sc.hasNext()) {
-      keySize = Integer.parseInt(sc.next());
+      try {
+        keySize = Integer.parseInt(sc.next());
+      } catch (NumberFormatException e) {
+        vcClient.renderOutput("invalid key size. Please enter a positive integer");
+      }
     }
 
 

@@ -7,9 +7,17 @@ import java.util.Map;
 import java.util.Scanner;
 import sharding.cli.model.IShardingCLIModel;
 import sharding.cli.model.ShardingCLIModelImpl;
+import sharding.cli.viewcontroller.commands.AssembleKeyCommand;
+import sharding.cli.viewcontroller.commands.DecryptCommand;
+import sharding.cli.viewcontroller.commands.EncryptCommand;
 import sharding.cli.viewcontroller.commands.GenerateKeyCommand;
+import sharding.cli.viewcontroller.commands.HelpCommand;
 import sharding.cli.viewcontroller.commands.ICLIClientCommand;
+import sharding.cli.viewcontroller.commands.QuitCommand;
 import sharding.cli.viewcontroller.commands.ShardKeyCommand;
+import sharding.cli.viewcontroller.commands.WriteAllCommand;
+import sharding.cli.viewcontroller.commands.WritePubCommand;
+import sharding.cli.viewcontroller.commands.WriteShardsCommand;
 
 public class CLIViewControllerClientImpl implements ICLIViewControllerClient {
 
@@ -58,9 +66,13 @@ public class CLIViewControllerClientImpl implements ICLIViewControllerClient {
     commandsMap.putIfAbsent("write-all", new WriteAllCommand(this));
     commandsMap.putIfAbsent("write-pub", new WritePubCommand(this));
     commandsMap.putIfAbsent("write-shards", new WriteShardsCommand(this));
-    //commandsMap.putIfAbsent("reassemble-key", new AssembleKeyCommand());
-    //commandsMap.putIfAbsent("encrypt", new EncryptCommand());
-    //commandsMap.putIfAbsent("decrypt", new DecryptCommand());
+    commandsMap.putIfAbsent("assemble-key", new AssembleKeyCommand(this));
+    commandsMap.putIfAbsent("encrypt", new EncryptCommand(this));
+    commandsMap.putIfAbsent("decrypt", new DecryptCommand(this));
+    commandsMap.putIfAbsent("help", new HelpCommand(this));
+    commandsMap.putIfAbsent("h", new HelpCommand(this));
+    commandsMap.putIfAbsent("q", new QuitCommand(this));
+    commandsMap.putIfAbsent("quit", new QuitCommand(this));
 
     return commandsMap;
 
@@ -68,20 +80,17 @@ public class CLIViewControllerClientImpl implements ICLIViewControllerClient {
 
   @Override
   public void run() {
-    renderOutput("Welcome");
+    renderOutput("Welcome to the RSA/Shamir Sharding CLI utility! \n" + HelpCommand.helpMenu);
     Scanner sc = new Scanner(System.in);
     String inp = "";
     while (sc.hasNext()) {
       inp = sc.next();
       if (commandsMap.containsKey(inp)) {
         commandsMap.get(inp).execute();
+      } else {
+        renderOutput("Unrecognized command. Enter 'h/help' to show help menu");
       }
     }
-  }
-
-  @Override
-  public void helpMenu() {
-
   }
 
   @Override
@@ -93,7 +102,7 @@ public class CLIViewControllerClientImpl implements ICLIViewControllerClient {
 
   @Override
   public void renderOutput(String toRender) {
-    System.out.println(toRender + "\n\n");
+    System.out.println("\n" + toRender + "\n");
   }
 
 

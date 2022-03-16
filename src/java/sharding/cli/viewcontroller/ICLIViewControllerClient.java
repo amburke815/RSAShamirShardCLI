@@ -9,8 +9,6 @@ public interface ICLIViewControllerClient {
 
   void run();
 
-  void helpMenu();
-
   void execute(ICLIClientCommand cmd);
 
   void renderOutput(String toRender);

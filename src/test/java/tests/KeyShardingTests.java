@@ -5,6 +5,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
+import javax.management.loading.PrivateClassLoader;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,14 +33,10 @@ public class KeyShardingTests {
     byte[] encryptedBytes = cliInstance.encrypt(randomPlainText, generatedRSAKeyPair.getPublic());
 
     // 3. reassembles the private key using shards 2 and 5
-    byte[] reassembledPrivateKeyBytes = cliInstance.assembleShards(2, 5);
-    // TODO: make the above a private key (possibly using KeyFactory)
+    PrivateKey reassembledPrivateKey = cliInstance.assembleShards(2, 5);
     try {
-      KeyFactory kf = KeyFactory.getInstance("RSA");
-      EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(reassembledPrivateKeyBytes);
-      PrivateKey privateKey = kf.generatePrivate(privKeySpec);
       // 4. decrypts the cipher text back into the plain text using the reassembled Private Key
-      String decrypted = cliInstance.decrypt(encryptedBytes, privateKey);
+      String decrypted = cliInstance.decrypt(encryptedBytes, reassembledPrivateKey);
       // 5. asserts the decrypted plain text is equal to the original plain text in step 2
       Assert.assertEquals(randomPlainText, decrypted);
 
