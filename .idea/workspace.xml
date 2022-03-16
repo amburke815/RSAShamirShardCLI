@@ -6,18 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="a8ce08b0-0636-41d1-ac46-3575f1d639a7" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/src/TODO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/NoSuchKeyException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClientImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ACLIClientCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/GenerateKeyCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ICLIClientCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/IllegalShamirShardingParametersException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ShardKeyCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WritePubCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteShardsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RSAShamirShardCLI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RSAShamirShardCLI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/InsecureRSAKeySizeException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/InsecureRSAKeySizeException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/com/company/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/IShardingCLIModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/IShardingCLIModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/ShardingCLIModelImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/ShardingCLIModelImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/com/company/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClientImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/CLIViewControllerClientImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ACLIClientCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ACLIClientCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/GenerateKeyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/GenerateKeyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ICLIClientCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ICLIClientCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sharding/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" afterDir="false" />
     </list>
@@ -106,6 +108,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Image-Manipulation-and-Enhancement" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -116,7 +119,7 @@
       <recent name="C:\Users\ambur\repos\RSAShamirShardCLI\src" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.KeyShardingTests.programWorksCorrectly">
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.company.Main" />
       <module name="RSAShamirShardCLI" />
@@ -200,11 +203,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="JUnit.KeyShardingTests.programWorksCorrectly" />
         <item itemvalue="JUnit.KeyShardingTests.decryptionIsInverseOfEncryption" />
         <item itemvalue="JUnit.KeyShardingTests.test" />
         <item itemvalue="JUnit.KeyShardingTests.produceRandomString" />
-        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>

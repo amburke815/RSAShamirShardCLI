@@ -1,7 +1,6 @@
 package sharding.cli.model;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,6 +31,47 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   private KeyPair generatedKeyPair;
   private Map<Integer, byte[]> shardsMap;
 
+  /**
+   * default ctor
+   */
+  public ShardingCLIModelImpl(){}
+
+  /**
+   * ctor to set key pair
+   * @param generatedKeyPair the KeyPair to set
+   */
+  public ShardingCLIModelImpl(KeyPair generatedKeyPair) {
+    this.generatedKeyPair = generatedKeyPair;
+  }
+
+  /**
+   * ctor to set shards map
+   * @param shardsMap the map of integer indices to shamir shards to set
+   */
+  public ShardingCLIModelImpl(Map<Integer, byte[]> shardsMap) {
+    this.shardsMap = shardsMap;
+  }
+
+  /**
+   * ctor to set both key pair and shards map field
+   * @param keyPair the key pair that this model holds
+   * @param shardsMap the shard map that this model holds.
+   */
+  public ShardingCLIModelImpl(KeyPair keyPair, Map<Integer,byte[]> shardsMap) {
+    this.generatedKeyPair = keyPair;
+    this.shardsMap = shardsMap;
+  }
+
+  // getter for key pair
+  public KeyPair getGeneratedKeyPair() {
+    return generatedKeyPair;
+  }
+
+  // getter for shards map
+  public Map<Integer, byte[]> getShardsMap() {
+    return shardsMap;
+  }
+
   @Override
   public String helpMenu() {
     return null;
@@ -43,7 +83,8 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   }
 
   @Override
-  public KeyPair RSAKeyGen(int keySize) {
+  public KeyPair RSAKeyGen(int keySize)
+    throws InsecureRSAKeySizeException {
     try {
       KeyPairGenerator kpg = KeyPairGenerator.getInstance(keyType);
       kpg.initialize(Utils.intBetween(1, checkRSAKeySize(keySize),
@@ -58,7 +99,9 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   @Override
   public Map<Integer, byte[]> shamirShardKey(KeyPair toShard, int numTotalShards,
-      int minShardsToCreate) {
+      int minShardsToCreate)
+    throws IllegalShamirShardingParametersException {
+    checkShamirShardingParameters(numTotalShards, minShardsToCreate);
     scheme = new Scheme(new SecureRandom(), numTotalShards, minShardsToCreate);
     final byte[] privateKeyBytes = toShard.getPrivate().getEncoded();
     shardsMap = scheme.split(privateKeyBytes);
@@ -68,7 +111,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   @Override
   public Map<Integer, byte[]> shamirShardKey(int numTotalShards, int minShardsToCreate)
-      throws NoSuchKeyException {
+      throws NoSuchKeyException, IllegalShamirShardingParametersException {
     return shamirShardKey(checkKeyPairGenerated(generatedKeyPair), numTotalShards,
         minShardsToCreate);
   }
@@ -186,6 +229,16 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   }
 
+  @Override
+  public void setRSAKey(KeyPair newKeyPair) {
+    this.generatedKeyPair = newKeyPair;
+  }
+
+  @Override
+  public void setShardsMap(Map<Integer, byte[]> newShardsMap) {
+    this.shardsMap = newShardsMap;
+  }
+
   /**
    * Checks that the given RSA key's size (in number of bits as a base 10 number) is a multiple of
    * 2048. Throws a <code>InsecureKeySizeException</code> if the check fails. Returns the key size
@@ -238,4 +291,9 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
     return toCheck;
   }
 
+  private static void checkShamirShardingParameters(int n, int k)
+    throws IllegalShamirShardingParametersException {
+    if (k > n || n < 1)
+      throw new IllegalShamirShardingParametersException();
+  }
 }

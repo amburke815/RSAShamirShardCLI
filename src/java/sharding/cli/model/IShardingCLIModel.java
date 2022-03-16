@@ -76,9 +76,10 @@ public interface IShardingCLIModel {
    * @return a <code>Map&lt Integer, byte[]&gt</code> where each key-pair value <code>(i,s)</code>
    * represents the <code>s</code>hard at index <code>i</code>
    * @throws NoSuchKeyException if the key to shard has not been generated yet
+   * @throws IllegalShamirShardingParametersException if the method is called with k > n, or n < 1
    */
   Map<Integer, byte[]> shamirShardKey(int numTotalShards, int minShardsToCreate)
-    throws NoSuchKeyException;
+    throws NoSuchKeyException, IllegalShamirShardingParametersException;
 
   /**
    * Writes the given <code>PublicKey</code> to a file <code>Public.TXT</code>
@@ -175,6 +176,13 @@ public interface IShardingCLIModel {
    * @return
    */
   byte[] assembleShards(int... shardIndices);
+
+
+  // public setter for RSA key field
+  void setRSAKey(KeyPair newKeyPair);
+
+  // public setter for shamir shards map
+  void setShardsMap(Map<Integer, byte[]> newShardsMap);
 
 
 }
