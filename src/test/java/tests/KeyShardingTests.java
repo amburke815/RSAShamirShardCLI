@@ -1,11 +1,8 @@
 package tests;
+
 import java.nio.charset.StandardCharsets;
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.spec.EncodedKeySpec;
-import java.security.spec.PKCS8EncodedKeySpec;
-import javax.management.loading.PrivateClassLoader;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,8 +10,8 @@ import sharding.cli.model.IShardingCLIModel;
 import sharding.cli.model.ShardingCLIModelImpl;
 
 public class KeyShardingTests {
-//   RandomStringUtils s;
-  RandomStringUtils rsu = new RandomStringUtils();
+
+  //   RandomStringUtils s;
   int randomStringLength = 256;
   public String randomStringPlainText = RandomStringUtils.random(randomStringLength, true, true);
   private IShardingCLIModel shardingCLI = new ShardingCLIModelImpl();
@@ -35,8 +32,10 @@ public class KeyShardingTests {
     // 3. reassembles the private key using shards 2 and 5
     PrivateKey reassembledPrivateKey = cliInstance.assembleShards(2, 5);
     try {
+
       // 4. decrypts the cipher text back into the plain text using the reassembled Private Key
       String decrypted = cliInstance.decrypt(encryptedBytes, reassembledPrivateKey);
+
       // 5. asserts the decrypted plain text is equal to the original plain text in step 2
       Assert.assertEquals(randomPlainText, decrypted);
 
@@ -44,8 +43,6 @@ public class KeyShardingTests {
       System.out.println(e.getMessage());
       Assert.fail();
     }
-
-
 
 
   }
@@ -61,7 +58,8 @@ public class KeyShardingTests {
     //System.out.println(plainText.length());
     plainText = "the quick brown fox jumps over the lazy dog";
     byte[] encryptedMessage = shardingCLI.encrypt(plainText, kp.getPublic());
-    System.out.println("encrypted message from byte arr: " + new String(encryptedMessage, StandardCharsets.US_ASCII));
+    System.out.println("encrypted message from byte arr: " + new String(encryptedMessage,
+        StandardCharsets.US_ASCII));
     String decryptedMessage = shardingCLI.decrypt(encryptedMessage, kp.getPrivate());
     System.out.println(decryptedMessage);
 

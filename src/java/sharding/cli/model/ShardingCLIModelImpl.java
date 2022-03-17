@@ -69,7 +69,12 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   private static int defaultKeySize = 2048;
   private static final String keyType = "RSA";
-  private static final String paddingType = "OAEPPadding";
+  // if I were to make the encryption scheme more secure, I would use the following padding scheme
+  // to protect against chosen plaintext attacks, as well as using the RSA key to
+  // encrypt an AES key to encrypt messages. However, the assignment said to encrypt with the
+  // public RSA key, so I will not implement the functionality here.
+  private static final String encryptionTypeFullyQualified =
+      keyType + "/" + "ECB/OAEPWITHSHA-256ANDMGF1PADDING";
   private static final OAEPParameterSpec oaepParams =
       new OAEPParameterSpec("SHA-256", "MGF1", new MGF1ParameterSpec("SHA-256"),
           PSource.PSpecified.DEFAULT);
@@ -82,30 +87,16 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   /**
    * default ctor
    */
-  public ShardingCLIModelImpl(){}
-
-  /**
-   * ctor to set key pair
-   * @param generatedKeyPair the KeyPair to set
-   */
-  public ShardingCLIModelImpl(KeyPair generatedKeyPair) {
-    this.generatedKeyPair = generatedKeyPair;
-  }
-
-  /**
-   * ctor to set shards map
-   * @param shardsMap the map of integer indices to shamir shards to set
-   */
-  public ShardingCLIModelImpl(Map<Integer, byte[]> shardsMap) {
-    this.shardsMap = shardsMap;
+  public ShardingCLIModelImpl() {
   }
 
   /**
    * ctor to set both key pair and shards map field
-   * @param keyPair the key pair that this model holds
+   *
+   * @param keyPair   the key pair that this model holds
    * @param shardsMap the shard map that this model holds.
    */
-  public ShardingCLIModelImpl(KeyPair keyPair, Map<Integer,byte[]> shardsMap) {
+  public ShardingCLIModelImpl(KeyPair keyPair, Map<Integer, byte[]> shardsMap) {
     this.generatedKeyPair = keyPair;
     this.shardsMap = shardsMap;
   }
@@ -133,7 +124,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   @Override
   public KeyPair RSAKeyGen(int keySize)
-    throws InsecureRSAKeySizeException {
+      throws InsecureRSAKeySizeException {
     try {
       KeyPairGenerator kpg = KeyPairGenerator.getInstance(keyType);
       kpg.initialize(Utils.intBetween(1, checkRSAKeySize(keySize),
@@ -149,7 +140,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   @Override
   public Map<Integer, byte[]> shamirShardKey(KeyPair toShard, int numTotalShards,
       int minShardsToCreate)
-    throws IllegalShamirShardingParametersException {
+      throws IllegalShamirShardingParametersException {
     checkShamirShardingParameters(numTotalShards, minShardsToCreate);
     try {
       scheme = new Scheme(new SecureRandom(), numTotalShards, minShardsToCreate);
@@ -223,14 +214,15 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   @Override
   public byte[] encrypt(String plainText, PublicKey encryptWith) {
     try {
-      Cipher encCipher = Cipher.getInstance(keyType + "/" + paddingType);
-      encCipher.init(Cipher.ENCRYPT_MODE, encryptWith, oaepParams);
+      Cipher encCipher = Cipher.getInstance(keyType);
+      encCipher.init(Cipher.ENCRYPT_MODE, encryptWith/*, oaepParams*/);
       byte[] plainTextBytes = plainText.getBytes(StandardCharsets.UTF_8);
       //System.out.println("\n\n++plaintext size: " + plainTextBytes.length);
       //System.out.println("\n++BLOCK SIZE: " + encCipher.getBlockSize());
       return encCipher.doFinal(plainTextBytes);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
-        BadPaddingException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
+        BadPaddingException | NoSuchPaddingException /*| InvalidAlgorithmParameterException*/ e) {
+      // last exception above is necessary for implementing padding
       throw new IllegalStateException(
           "caught an " + e.getClass() + " when encrypting ciphertext" + e.getMessage());
     }
@@ -244,13 +236,14 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   @Override
   public String decrypt(byte[] cipherTextBytes, PrivateKey decryptWith) {
     try {
-      Cipher decCipher = Cipher.getInstance(keyType + "/" + paddingType);
-      decCipher.init(Cipher.DECRYPT_MODE, decryptWith, oaepParams);
+      Cipher decCipher = Cipher.getInstance(keyType);
+      decCipher.init(Cipher.DECRYPT_MODE, decryptWith/*, oaepParams*/);
       final byte[] plainTextBytes = decCipher.doFinal(cipherTextBytes);
 
       return new String(plainTextBytes, StandardCharsets.US_ASCII);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
-        BadPaddingException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
+        BadPaddingException | NoSuchPaddingException /*| InvalidAlgorithmParameterException*/ e) {
+      // last exception above is necessary for implementing padding
       throw new IllegalStateException(
           "caught an " + e.getClass() + " when encrypting ciphertext \n\n" + e.getMessage());
     }
@@ -260,7 +253,6 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   public String decrypt(byte[] cipherTextBytes) throws NoSuchKeyException {
     return decrypt(cipherTextBytes, checkPrivateKeyReassembled(reassembledPrivateKey));
   }
-
 
 //  @Override
 //  public String decrypt(byte[] cipherTextBytes, List<byte[]> shards) {
@@ -288,7 +280,8 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
       this.reassembledPrivateKey = kf.generatePrivate(privKeySpec);
       return reassembledPrivateKey;
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      throw new IllegalStateException("Caught an " + e.getClass() + ". Could not reassemble shards to private key");
+      throw new IllegalStateException(
+          "Caught an " + e.getClass() + ". Could not reassemble shards to private key");
     }
 
   }
@@ -356,24 +349,28 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   }
 
   /**
-   * Checks if Shamir's Secret Sharing algorithm was called with valid paramters, i.e.
-   * if the algorithm was used to break a key into n pieces where k are required to recover the key,
-   * then this method checks that k <= n and n >= 1 and k > 1
+   * Checks if Shamir's Secret Sharing algorithm was called with valid paramters, i.e. if the
+   * algorithm was used to break a key into n pieces where k are required to recover the key, then
+   * this method checks that k <= n and n >= 1 and k > 1
+   *
    * @param n the number of Shamir shards to be created
    * @param k the minimum number of Shamir shards necessary to recover the sharded key
    * @throws IllegalShamirShardingParametersException If the above conditions were not met and thus
-   * Shamir's Secret Sharing Algorithm was called with invalid parameters
+   *                                                  Shamir's Secret Sharing Algorithm was called
+   *                                                  with invalid parameters
    */
   private static void checkShamirShardingParameters(int n, int k)
-    throws IllegalShamirShardingParametersException {
-    if ((k > n || n < 1) && k > 1)
+      throws IllegalShamirShardingParametersException {
+    if ((k > n || n < 1) && k > 1) {
       throw new IllegalShamirShardingParametersException();
+    }
   }
 
   /**
-   * Checks that the private key <code>pk</code> is non-null, and equivalently with respect to
-   * the business logic of the CLI, that <code>RSAKeyGen()</code> was called to initialize
-   * the RSA key used for decryption and encryption in methods that do not explicitly take an RSA key.
+   * Checks that the private key <code>pk</code> is non-null, and equivalently with respect to the
+   * business logic of the CLI, that <code>RSAKeyGen()</code> was called to initialize the RSA key
+   * used for decryption and encryption in methods that do not explicitly take an RSA key.
+   *
    * @param pk the <code>KeyPair</code> to check for nullity
    * @return <code>pk</code> if it is non-null
    */
