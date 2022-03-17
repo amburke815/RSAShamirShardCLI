@@ -113,11 +113,6 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   }
 
   @Override
-  public String helpMenu() {
-    return null;
-  }
-
-  @Override
   public KeyPair RSAKeyGen() {
     return RSAKeyGen(defaultKeySize);
   }

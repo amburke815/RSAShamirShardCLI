@@ -7,8 +7,7 @@ import sharding.cli.viewcontroller.ICLIViewControllerClient;
  */
 public class HelpCommand extends ACLIClientCommand {
 
-  public static final String helpMenu = "+++++++++++++++++++++++++++++++++\n"
-      + "(1) gen-key.....Generates an RSA key pair of a size (in bits) that is a multiple of 2048\n"
+  public static final String helpMenu = "(1) gen-key.....Generates an RSA key pair of a size (in bits) that is a multiple of 2048\n"
       + "(2) shard-key.....Shards the current private RSA key into n shards using Shamir's Secret Sharing"
       + "Algorithm, requiring k shards to recreate the key\n"
       + "(3) write-all.....writes the public RSA key to ./Keys/Public.TXT and each k'th shard of the private key to ./Keys"

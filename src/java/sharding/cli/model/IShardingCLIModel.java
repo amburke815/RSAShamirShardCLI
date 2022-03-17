@@ -21,7 +21,6 @@ import java.util.Map;
  */
 public interface IShardingCLIModel {
 
-  String helpMenu();
 
   /**
    * Generates an RSA Key Pair of default size--typically 2048 to provide security against
