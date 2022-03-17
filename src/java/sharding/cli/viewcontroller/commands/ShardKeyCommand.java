@@ -1,11 +1,13 @@
 package sharding.cli.viewcontroller.commands;
 
-import sharding.cli.model.IShardingCLIModel;
 import sharding.cli.model.IllegalShamirShardingParametersException;
 import sharding.cli.model.NoSuchKeyException;
-import sharding.cli.viewcontroller.CLIViewControllerClientImpl;
 import sharding.cli.viewcontroller.ICLIViewControllerClient;
 
+/**
+ * Function object that supports the execution of the <code>IShardingCLIModel.shamirShardKey</code> method,
+ * parses input from the user, and gives appropriate feedback to the user.
+ */
 public class ShardKeyCommand extends ACLIClientCommand {
 
   public ShardKeyCommand(ICLIViewControllerClient vcClient) {

@@ -7,24 +7,27 @@
     <list default="true" id="a8ce08b0-0636-41d1-ac46-3575f1d639a7" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/src/TODO.md" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/IllegalShamirShardingParametersException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/KeyNotShardedException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/NoReassembledKeyException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/AssembleKeyCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/DecryptCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/EncryptCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/HelpCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/QuitCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteAllCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RSAShamirShardCLI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/RSAShamirShardCLI.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/com/company/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/com/company/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/Utils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/IShardingCLIModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/IShardingCLIModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/KeyNotShardedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/KeyNotShardedException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/NoReassembledKeyException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/NoReassembledKeyException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/NoSuchKeyException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/NoSuchKeyException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/model/ShardingCLIModelImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/model/ShardingCLIModelImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/CLIViewControllerClientImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/CLIViewControllerClientImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/ICLIViewControllerClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ACLIClientCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ACLIClientCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/AssembleKeyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/AssembleKeyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/DecryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/DecryptCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/EncryptCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/EncryptCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/GenerateKeyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/GenerateKeyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/HelpCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/HelpCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ICLIClientCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ICLIClientCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/QuitCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/QuitCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ShardKeyCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/ShardKeyCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteAllCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteAllCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WritePubCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WritePubCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteShardsCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteShardsCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" afterDir="false" />
@@ -52,6 +55,18 @@
       <filtered-out-file-type name="TAG" />
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/test/java/tests/KeyShardingTests.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/AssembleKeyCommand.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/com/company/Main.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/model/ShardingCLIModelImpl.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/model/IShardingCLIModel.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteAllCommand.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WritePubCommand.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/commands/WriteShardsCommand.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/cli/viewcontroller/CLIViewControllerClientImpl.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/java/sharding/Utils.java" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="264nqPbP0vLXBzS4RFX684XvdNI" />
   <component name="ProjectView">

@@ -5,6 +5,10 @@ import sharding.cli.model.KeyNotShardedException;
 import sharding.cli.model.NoSuchKeyException;
 import sharding.cli.viewcontroller.ICLIViewControllerClient;
 
+/**
+ * Function object that supports the execution of the <code>ICLIClient.writeShards</code> method,
+ * parses input from the user, and gives appropriate feedback to the user.
+ */
 public class WriteShardsCommand extends ACLIClientCommand {
 
   public WriteShardsCommand(ICLIViewControllerClient vcClient) {
@@ -14,10 +18,10 @@ public class WriteShardsCommand extends ACLIClientCommand {
   @Override
   public void execute() {
     try {
+
       File savePath = new File("./Keys");
-      if (! savePath.exists()) {
-        savePath.mkdir();
-      }
+      // Utils.chmod777(savePath);
+
       vcClient.renderOutput("Writing private RSA key shards to ./Keys/Shard[k].TXT...");
       vcClient.getShardingModel().writeShards();
       vcClient.renderOutput("Successfully wrote private RSA key shards to ./Keys/Shard[k].TXT !");

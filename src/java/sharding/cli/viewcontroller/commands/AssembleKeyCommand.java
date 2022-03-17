@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.ArrayList;
 import sharding.cli.viewcontroller.ICLIViewControllerClient;
 
+/**
+ * Function object that supports the execution of the <code>IShardingCLIModel.assembleKey</code> method,
+ * parses input from the user, and gives appropriate feedback to the user.
+ */
 public class AssembleKeyCommand extends ACLIClientCommand {
 
   public AssembleKeyCommand(ICLIViewControllerClient vcClient) {
@@ -39,6 +43,11 @@ public class AssembleKeyCommand extends ACLIClientCommand {
     }
   }
 
+  /**
+   * Utility method to convert an arraylist of integers to an equivalent array.
+   * @param toConvert the arraylist to convert to an array
+   * @return the equivalent array
+   */
   private static int[] arrayListToArray(List<Integer> toConvert) {
     int[] arrayed = new int[toConvert.size()];
     for (int i = 0; i < toConvert.size(); i++) {

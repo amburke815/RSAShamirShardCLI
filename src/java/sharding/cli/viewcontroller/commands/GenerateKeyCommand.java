@@ -18,8 +18,7 @@ public class GenerateKeyCommand extends ACLIClientCommand {
 
   @Override
   public void execute() {
-    vcClient.renderOutput("Enter a key size as a multiple of 2048. Press enter to default to a key "
-        + "size of 2048\n\n");
+    vcClient.renderOutput("Enter a key size as a multiple of 2048.");
     int keySize = 2048;
     if (sc.hasNext()) {
       try {

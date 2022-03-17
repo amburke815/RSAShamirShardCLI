@@ -2,6 +2,11 @@ package sharding.cli.viewcontroller.commands;
 
 import sharding.cli.viewcontroller.ICLIViewControllerClient;
 
+/**
+ * Function object that supports the execution of the <code>IShardingCLIModel.writePublic</code> and
+ * <code>IShardingCLIModel.writeShards</code> methods,
+ * parses input from the user, and gives appropriate feedback to the user.
+ */
 public class WriteAllCommand extends ACLIClientCommand {
 
   public WriteAllCommand(ICLIViewControllerClient vcClient) {

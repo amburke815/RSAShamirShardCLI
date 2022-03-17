@@ -1,10 +1,14 @@
 package sharding.cli.viewcontroller.commands;
 
 import java.io.File;
-import java.nio.file.Path;
 import sharding.cli.model.NoSuchKeyException;
 import sharding.cli.viewcontroller.ICLIViewControllerClient;
 
+/**
+ * Function object that supports the execution of the <code>ICLIClient.writePublic</code> method,
+ * parses input from the user, and gives appropriate feedback to the user.
+ * Writes public key to ./Keys directory
+ */
 public class WritePubCommand extends ACLIClientCommand {
 
   public WritePubCommand(ICLIViewControllerClient vcClient) {
@@ -15,6 +19,7 @@ public class WritePubCommand extends ACLIClientCommand {
   public void execute() {
     try {
       File savePath = new File("./Keys");
+      // Utils.chmod777(savePath);
       if (! savePath.exists()) {
         savePath.mkdir();
       }

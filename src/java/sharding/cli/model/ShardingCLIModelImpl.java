@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -14,6 +15,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,14 +24,55 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.OAEPParameterSpec;
+import javax.crypto.spec.PSource;
 import sharding.Utils;
 import com.codahale.shamir.Scheme;
 import java.security.SecureRandom;
 
+
+/**
+ * A simple implementation of the <code>IShardingCLIModel</code> interface that has the following
+ * distinguishing features:
+ * <ul>
+ *   <li>Enforces that RSA keys are of size 2048q, where q >= 1 is a positive integer. This
+ *   ensures that RSA keys are secure against brute-force and factoring attacks. i.e. If Eve
+ *   were to try and compute Bob's private key modulus N and encryption exponent e, she would
+ *   have to do so by guessing all possible combinations of N and e, or factoring N and pairing it
+ *   with every possible e, which with a key size of 2048 bits is secure enough for most computers
+ *   in 2022</li>
+ *   <li>Has two I/O methods that write text files to memory, describing the public key and Shamir
+ *   shards. These files are protected by calling a method whose effect is equivalent to "chmod 777"
+ *   posix privilege modification. This means that the files written to memory require sudo/admin
+ *   access (for linux/windows, resp.) to read, write, and execute. This functionality also guarantees
+ *   that only the owner of these files has access to them, making the CLI secure for distributed
+ *   systems</li>
+ *   <li>Contains a few fields that track the state of an instance of this class, namely
+ *   a <code>Scheme, KeyPair, Map, </code> and <code>PrivateKey</code>. These fields allow the
+ *   developer to implement twin overloaded method signatures where one takes one or more of these types,
+ *   and the other does not explicitly take one of these types, but uses the object encapsulated in
+ *   this instance. For example, implementing <code>encrypt(String, KeyPair)</code> and its twin
+ *   overloaded method <code>encrypt(String)</code> is simple, since the former just uses the
+ *   <code>KeyPair</code> field of this instance that was set in <code>RSAKeyGen()</code>
+ *   </li>
+ *   <li>In the method signatures that omit objects that appear as states in an instance of this class,
+ *   those methods throw custom exceptions that indicate various failures of a sequence-based
+ *   operation of this model. For example, if we were to try and encrypt a message <code>m</code>
+ *   using the <code>encrypt</code> signature that omits a <code>KeyPair</code> object and instead
+ *   uses the <code>KeyPair</code> field of this class. If that field were never set by
+ *   <code>RSAKeyGen()</code>, then it would be <code>null</code> and a custom exception would be thrown.
+ *   The reason for this is to make these errors easily handleable by a controller/view implementation
+ *   that can give specific feedback directly in the CLI.</li>
+ * </ul>
+ */
 public class ShardingCLIModelImpl implements IShardingCLIModel {
 
   private static int defaultKeySize = 2048;
   private static final String keyType = "RSA";
+  private static final String paddingType = "OAEPPadding";
+  private static final OAEPParameterSpec oaepParams =
+      new OAEPParameterSpec("SHA-256", "MGF1", new MGF1ParameterSpec("SHA-256"),
+          PSource.PSpecified.DEFAULT);
   private static final String path = "./Keys/";
   private Scheme scheme;
   private KeyPair generatedKeyPair;
@@ -67,10 +110,6 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
     this.shardsMap = shardsMap;
   }
 
-  // getter for key pair
-  public KeyPair getGeneratedKeyPair() {
-    return generatedKeyPair;
-  }
 
   // getter for shards map
   public Map<Integer, byte[]> getShardsMap() {
@@ -112,7 +151,11 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
       int minShardsToCreate)
     throws IllegalShamirShardingParametersException {
     checkShamirShardingParameters(numTotalShards, minShardsToCreate);
-    scheme = new Scheme(new SecureRandom(), numTotalShards, minShardsToCreate);
+    try {
+      scheme = new Scheme(new SecureRandom(), numTotalShards, minShardsToCreate);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalShamirShardingParametersException();
+    }
     final byte[] privateKeyBytes = toShard.getPrivate().getEncoded();
     shardsMap = scheme.split(privateKeyBytes);
     return shardsMap;
@@ -129,6 +172,8 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   @Override
   public void writePublicKey(PublicKey toWrite) {
     File f = new File(path + "Public.TXT");
+    Utils.chmod000(f);
+
     try {
       OutputStream os = new FileOutputStream(f);
       os.write(toWrite.getEncoded());
@@ -164,6 +209,7 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
    */
   private static void writeShard(int shardIdx, byte[] shardBytes) {
     File toWrite = new File(path + "Shard" + shardIdx + ".TXT");
+    Utils.chmod000(toWrite);
     try {
       OutputStream os = new FileOutputStream(toWrite);
       os.write(shardBytes);
@@ -177,14 +223,14 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   @Override
   public byte[] encrypt(String plainText, PublicKey encryptWith) {
     try {
-      Cipher encCipher = Cipher.getInstance(keyType);
-      encCipher.init(Cipher.ENCRYPT_MODE, encryptWith);
+      Cipher encCipher = Cipher.getInstance(keyType + "/" + paddingType);
+      encCipher.init(Cipher.ENCRYPT_MODE, encryptWith, oaepParams);
       byte[] plainTextBytes = plainText.getBytes(StandardCharsets.UTF_8);
       //System.out.println("\n\n++plaintext size: " + plainTextBytes.length);
       //System.out.println("\n++BLOCK SIZE: " + encCipher.getBlockSize());
       return encCipher.doFinal(plainTextBytes);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
-        BadPaddingException | NoSuchPaddingException e) {
+        BadPaddingException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
       throw new IllegalStateException(
           "caught an " + e.getClass() + " when encrypting ciphertext" + e.getMessage());
     }
@@ -198,13 +244,13 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
   @Override
   public String decrypt(byte[] cipherTextBytes, PrivateKey decryptWith) {
     try {
-      Cipher decCipher = Cipher.getInstance(keyType);
-      decCipher.init(Cipher.DECRYPT_MODE, decryptWith);
+      Cipher decCipher = Cipher.getInstance(keyType + "/" + paddingType);
+      decCipher.init(Cipher.DECRYPT_MODE, decryptWith, oaepParams);
       final byte[] plainTextBytes = decCipher.doFinal(cipherTextBytes);
 
       return new String(plainTextBytes, StandardCharsets.US_ASCII);
     } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException |
-        BadPaddingException | NoSuchPaddingException e) {
+        BadPaddingException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
       throw new IllegalStateException(
           "caught an " + e.getClass() + " when encrypting ciphertext \n\n" + e.getMessage());
     }
@@ -239,7 +285,8 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
     try {
       KeyFactory kf = KeyFactory.getInstance("RSA");
       EncodedKeySpec privKeySpec = new PKCS8EncodedKeySpec(reassembledPrivateKeyBytes);
-      return kf.generatePrivate(privKeySpec);
+      this.reassembledPrivateKey = kf.generatePrivate(privKeySpec);
+      return reassembledPrivateKey;
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       throw new IllegalStateException("Caught an " + e.getClass() + ". Could not reassemble shards to private key");
     }
@@ -308,13 +355,28 @@ public class ShardingCLIModelImpl implements IShardingCLIModel {
     return toCheck;
   }
 
+  /**
+   * Checks if Shamir's Secret Sharing algorithm was called with valid paramters, i.e.
+   * if the algorithm was used to break a key into n pieces where k are required to recover the key,
+   * then this method checks that k <= n and n >= 1 and k > 1
+   * @param n the number of Shamir shards to be created
+   * @param k the minimum number of Shamir shards necessary to recover the sharded key
+   * @throws IllegalShamirShardingParametersException If the above conditions were not met and thus
+   * Shamir's Secret Sharing Algorithm was called with invalid parameters
+   */
   private static void checkShamirShardingParameters(int n, int k)
     throws IllegalShamirShardingParametersException {
-    if (k > n || n < 1)
+    if ((k > n || n < 1) && k > 1)
       throw new IllegalShamirShardingParametersException();
   }
 
-
+  /**
+   * Checks that the private key <code>pk</code> is non-null, and equivalently with respect to
+   * the business logic of the CLI, that <code>RSAKeyGen()</code> was called to initialize
+   * the RSA key used for decryption and encryption in methods that do not explicitly take an RSA key.
+   * @param pk the <code>KeyPair</code> to check for nullity
+   * @return <code>pk</code> if it is non-null
+   */
   private static PrivateKey checkPrivateKeyReassembled(PrivateKey pk) {
     if (pk == null) {
       throw new NoReassembledKeyException();
