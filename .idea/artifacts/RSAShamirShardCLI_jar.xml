@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="RSAShamirShardCLI:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RSAShamirShardCLI_jar</output-path>
+    <root id="archive" name="RSAShamirShardCLI.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="RSAShamirShardCLI" />
+      <element id="module-test-output" name="RSAShamirShardCLI" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/codahale/shamir/0.7.0/shamir-0.7.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.8.1/junit-4.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

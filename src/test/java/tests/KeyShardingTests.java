@@ -39,6 +39,8 @@ public class KeyShardingTests {
       // 5. asserts the decrypted plain text is equal to the original plain text in step 2
       Assert.assertEquals(randomPlainText, decrypted);
 
+      //System.out.println(new String(encryptedBytes, StandardCharsets.US_ASCII));
+
     } catch (Exception e) {
       System.out.println(e.getMessage());
       Assert.fail();
@@ -48,20 +50,15 @@ public class KeyShardingTests {
   }
 
   @Test
-  public void produceRandomString() {
-    System.out.println(randomStringPlainText);
-  }
-
-  @Test
   public void decryptionIsInverseOfEncryption() {
     String plainText = randomStringPlainText;
     //System.out.println(plainText.length());
     plainText = "the quick brown fox jumps over the lazy dog";
     byte[] encryptedMessage = shardingCLI.encrypt(plainText, kp.getPublic());
-    System.out.println("encrypted message from byte arr: " + new String(encryptedMessage,
-        StandardCharsets.US_ASCII));
+    //System.out.println("encrypted message from byte arr: " + new String(encryptedMessage,
+    //    StandardCharsets.US_ASCII));
     String decryptedMessage = shardingCLI.decrypt(encryptedMessage, kp.getPrivate());
-    System.out.println(decryptedMessage);
+    //System.out.println(decryptedMessage);
 
     Assert.assertEquals(plainText, decryptedMessage);
   }
